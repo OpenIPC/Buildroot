@@ -5,14 +5,16 @@ WORKDIR /root
 
 # Install dependencies.
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive\
-    apt-get install -y build-essential libncurses5-dev rsync cpio python unzip bc wget
+    apt-get install -y build-essential libncurses5-dev rsync cpio python unzip bc wget git bison flex gettext texinfo
 
 # Install Buildroot.
-RUN wget -nv https://buildroot.org/downloads/buildroot-2018.02.6.tar.bz2 &&\
-    tar xf buildroot-*.tar* &&\
-    rm buildroot-*.tar* &&\
-    ln -s buildroot-* buildroot &&\
-    mkdir -v buildroot/patches
+RUN git clone https://github.com/buildroot/buildroot.git && cd buildroot/ && git checkout 362256a31e72691cf46e8b83c549d7a3ab2329fb &&\
+    mkdir -v patches
+# RUN wget -nv https://buildroot.org/downloads/buildroot-2018.02.6.tar.bz2 &&\
+#     tar xf buildroot-*.tar* &&\
+#     rm buildroot-*.tar* &&\
+#     ln -s buildroot-* buildroot &&\
+#     mkdir -v buildroot/patches
 
 # Create rootfs overlay.
 RUN mkdir -vpm775 buildroot/rootfs_overlay/srv
